@@ -1,0 +1,278 @@
+
+%%%% ESSENTIAL PACKAGES %%%%
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{expl3}
+\usepackage{xparse}
+\usepackage{etoolbox}
+\usepackage{xstring}
+\usepackage{microtype}
+
+%%%% FONT CONFIGURATION %%%%
+\usepackage{palatino}
+\usepackage{avant}
+
+%%%% COLOR %%%%
+\usepackage[table]{xcolor}
+\definecolor{baseColor}{HTML}{2E55A6}
+\definecolor{colorText}{HTML}{2E55A6}
+\definecolor{theah}{HTML}{2E55A6}
+\definecolor{khitai}{HTML}{39622E}
+\definecolor{1knations}{HTML}{A00909}
+\definecolor{newWorld}{HTML}{C8A000}
+\definecolor{ifri}{HTML}{C95000}
+\definecolor{crescentEmpire}{HTML}{8F431B}
+\definecolor{citiesOfWonder}{HTML}{782FA9}
+\definecolor{pirateNations}{HTML}{540304}
+\definecolor{priceOfArrogance}{HTML}{285E79}
+\colorlet{specialNotesTextColor}{white}
+
+%%%% TABLE PACKAGES %%%%
+% tabularray replaces tabularx+colortbl — no TeX Live 2025 issues
+\usepackage{tabularray}
+\UseTblrLibrary{varwidth}
+
+%%%% GRAPHICS & BOXES %%%%
+\usepackage{tikz}
+\usepackage[most]{tcolorbox}
+\tcbset{sharp corners, boxrule=0pt, frame hidden}
+\usepackage[framemethod=TikZ]{mdframed}
+
+
+\usepackage{eso-pic}
+\usepackage{graphicx}
+\usepackage{ifthen}
+
+\AddToShipoutPictureBG{%
+	\ifthenelse{\isodd{\value{page}}}{%
+		\includegraphics[width=\paperwidth,height=\paperheight]{img/page-backgrounds/paper.jpg}%
+	}{%
+		\includegraphics[width=\paperwidth,height=\paperheight]{img/page-backgrounds/paper2.jpg}%
+	}%
+}
+
+%%%% THEME SYSTEM %%%%
+\ExplSyntaxOn
+\cs_new:Npn \set_theme_variables:n #1 {
+	\colorlet{baseColor}{#1}
+	\colorlet{colorText}{#1}
+	\tl_set:Nn \l_theme_tl {#1}
+	\str_case:nnF {#1} {
+		{newWorld} { \colorlet{specialNotesTextColor}{black} }
+	}
+	{ \colorlet{specialNotesTextColor}{white} }
+}
+\cs_new_eq:NN \SetThemeVariables \set_theme_variables:n
+\cs_new:Npn \gettheme { \tl_use:N \l_theme_tl }
+\ExplSyntaxOff
+
+\newcommand{\setTheme}[1]{%
+	\IfStrEqCase{#1}{%
+		{theah}            {\SetThemeVariables{theah}}%
+		{khitai}           {\SetThemeVariables{khitai}}%
+		{1knations}        {\SetThemeVariables{1knations}}%
+		{newWorld}         {\SetThemeVariables{newWorld}}%
+		{ifri}             {\SetThemeVariables{ifri}}%
+		{crescentEmpire}   {\SetThemeVariables{crescentEmpire}}%
+		{citiesOfWonder}   {\SetThemeVariables{citiesOfWonder}}%
+		{pirateNations}    {\SetThemeVariables{pirateNations}}%
+		{priceOfArrogance} {\SetThemeVariables{priceOfArrogance}}%
+	}%
+}
+
+%%%% SECTION FORMATTING %%%%
+\usepackage{titlesec}
+\usepackage{titletoc}
+
+\pretocmd{\chapter}{\cleardoublepage}{}{}
+
+\titleformat{\chapter}[display]
+{\normalfont\Huge\filcenter}{}{0pt}
+{\vspace*{0.01\textheight}\MakeUppercase}
+[\vskip-12pt{\color{baseColor}\rule{\linewidth}{1pt}}]
+
+\titleformat{\section}[block]{\normalfont\LARGE}{}{0pt}{\MakeUppercase}
+\titleformat{\subsection}[block]{\normalfont\Large}{}{0pt}{\MakeUppercase}
+\titleformat{\subsubsection}[block]{\normalfont\large}{}{0pt}{\MakeUppercase}
+
+%%%% TABLE OF CONTENTS %%%%
+\makeatletter
+\renewcommand\tableofcontents{%
+	\chapter*{\centering\normalfont\Huge\contentsname}
+	\@starttoc{toc}%
+}
+\makeatother
+
+\titlecontents{part}[0pt]
+{\addvspace{.06in}\large\bfseries\rmfamily}
+{\partname\ \thecontentslabel:~}{}
+{\hfill\contentspage}
+[\addvspace{-.03in}\titleline{\color{baseColor}\titlerule[1pt]}\addvspace{.05in}]
+
+\titlecontents{chapter}[0pt]
+{\addvspace{.04in}\large\scshape\rmfamily\color{baseColor}}
+{}{}{\hfill\contentspage}
+[\addvspace{-.03in}\titleline{\color{black}\titlerule[0.5pt]}\addvspace{.05in}]
+
+\titlecontents{section}[0pt]{\normalsize\scshape\rmfamily}
+{}{}{\titlerule*{.}\contentspage}
+\titlecontents{subsection}[10pt]{\normalsize\scshape\rmfamily}
+{}{}{\titlerule*{.}\contentspage}
+\titlecontents{subsubsection}[15pt]{\normalsize\scshape\rmfamily}
+{}{}{\titlerule*{.}\contentspage}
+
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{-1}
+
+%%%% NICETABLE %%%%
+% Uses tabularray — no colortbl/rowcolors, no TeX Live 2025 issues.
+% Usage:
+%   \begin{NiceTable}{colspec}                        — plain table
+	%   \begin{NiceTable}[My Header]{colspec}             — with header
+		%   \begin{NiceTable}[My Header][blue!20]{colspec}    — header + row color
+			
+			\NewDocumentEnvironment{NiceTable}{o O{white} m}{%
+				\par\vspace{9pt plus 3pt minus 3pt}\noindent
+				\IfValueT{#1}{{\large\bfseries\sffamily #1\nopagebreak}\par\vspace{5pt plus 2pt minus 2pt}\noindent}%
+				\small\sffamily
+				\begin{tblr}{
+						colspec={#3},
+						row{odd}={#2},
+						row{even}={},
+						rowsep=3pt,
+						row{1}={abovesep=8pt, belowsep=8pt},
+					}%
+				}{%
+				\end{tblr}%
+				\vspace{9pt plus 3pt minus 3pt}%
+			}
+			
+			%%%% CITATION %%%%
+			\NewDocumentEnvironment{Citation}{o m}{%
+				\par\vspace{1em}
+				\begin{center}\itshape ``#2''\end{center}
+				\IfValueT{#1}{\par\noindent\hfill{\itshape\textemdash\ #1}\par}
+				\vspace{0.5em}
+			}{}
+			
+			%%%% LAYOUT HELPERS %%%%
+			\usepackage{float}
+			\usepackage{framed}
+			\newfloat{custombox}{tp}{lob}
+			\floatname{custombox}{Box}
+			
+			\NewDocumentCommand{\placetopbox}{}{%
+				\begin{tikzpicture}[remember picture, overlay]
+					\checkoddpage
+					\ifoddpage
+					\fill[baseColor]
+					([xshift=\columnwidth+\mysidemargin+\mycolumnspace]current page.north west)
+					rectangle ++(\columnwidth,-\mytopmargin);
+					\else
+					\fill[baseColor]
+					([xshift=-\columnwidth-\mysidemargin-\mycolumnspace]current page.north east)
+					rectangle ++(-\columnwidth,-\mytopmargin);
+					\fi
+				\end{tikzpicture}%
+			}
+			
+			%%%% COLORED BOXES %%%%
+			\newtcolorbox{bgbox}{
+				colback=baseColor, colframe=baseColor,
+				width=\columnwidth, coltext=specialNotesTextColor,
+				left=5pt, right=5pt, top=2pt, bottom=2pt
+			}
+			\newcommand{\BGHeader}[1]{%
+				\begin{bgbox}\noindent\large\textsc{\MakeUppercase{#1}}\end{bgbox}%
+			}
+			\newcommand{\Quirk}[2]{\medskip\noindent\textsc{#1}: \textit{#2}}
+			
+			\NewDocumentEnvironment{ColorBox}{m}{%
+				\bigskip\noindent
+				\begin{tcolorbox}[
+					enhanced, colback=baseColor!10, colframe=baseColor,
+					coltext=black, boxrule=0.4pt, sharp corners,
+					left=8pt, right=8pt, top=6pt, bottom=6pt,
+					frame code={
+						\draw[color=baseColor, line width=0.4pt]
+						(frame.south west) rectangle (frame.north east);
+					}]
+					#1
+				\end{tcolorbox}
+			}{}
+			
+			%%%% SPECIAL NOTES %%%%
+			\newsavebox{\specialnotesbox}
+			\newsavebox{\overlaytempbox}
+			\newlength{\specialnotesheight}
+			\newlength{\specialnotestotalheight}
+			\newlength{\specialnotesxshift}
+			\setlength{\specialnotesxshift}{-15pt}
+			
+			\newcommand{\drawcoverimage}[4]{%
+				\savebox{\overlaytempbox}{\includegraphics[width=#2]{#1}}%
+				\ifdim\ht\overlaytempbox<#3%
+				\savebox{\overlaytempbox}{\includegraphics[height=#3]{#1}}%
+				\fi
+				\node[#4]{\usebox{\overlaytempbox}};%
+			}
+			
+			\NewDocumentEnvironment{SpecialNotes}{O{} m +b}{%
+				\edef\overlaypath{#1}%
+				\savebox{\specialnotesbox}{%
+					\begin{minipage}{\columnwidth}
+						\begin{mdframed}[
+							linewidth=0pt,
+							innerleftmargin=0pt, innerrightmargin=5pt,
+							innertopmargin=6pt,  innerbottommargin=6pt,
+							backgroundcolor=none, skipabove=0pt, skipbelow=0pt]
+							\begin{minipage}{\dimexpr\columnwidth-32pt\relax}
+								\begin{center}
+									{\color{specialNotesTextColor}\Large\MakeUppercase{#2}\par}
+								\end{center}
+								\normalsize
+								\begin{center}
+									\begin{tikzpicture}
+										\draw[specialNotesTextColor, dotted, line width=6pt,
+										dash pattern=on 1pt off 2pt]
+										(0,0) -- (\columnwidth,0);
+									\end{tikzpicture}
+								\end{center}
+								\setlength{\parskip}{1em}
+								\color{specialNotesTextColor}
+								#3
+								\vspace{2em}
+							\end{minipage}
+						\end{mdframed}
+					\end{minipage}%
+				}%
+				\setlength{\specialnotesheight}{\dimexpr\ht\specialnotesbox+\dp\specialnotesbox\relax}%
+				\setlength{\specialnotestotalheight}{\dimexpr\mytopmargin+\specialnotesheight\relax}%
+				\begin{tikzpicture}[remember picture, overlay]
+					\node[inner sep=0pt, outer sep=0pt, anchor=north west]
+					(specialnotesanchor) at (0,0) {};
+				\end{tikzpicture}
+				\begin{tikzpicture}[remember picture, overlay]
+					\fill[baseColor]
+					([xshift=\specialnotesxshift]specialnotesanchor.north west |- current page.north)
+					rectangle ++(\columnwidth,-\specialnotestotalheight);
+					\ifx\overlaypath\empty\else
+					\begin{scope}
+						\clip
+						([xshift=\specialnotesxshift]specialnotesanchor.north west |- current page.north)
+						rectangle ++(\columnwidth,-\specialnotestotalheight);
+						\drawcoverimage{\overlaypath}{\columnwidth}{\specialnotestotalheight}{%
+							opacity=0.15, inner sep=0pt, outer sep=0pt, anchor=north,
+							at={([xshift=\specialnotesxshift+0.5\columnwidth]
+								specialnotesanchor.north west |- current page.north)}%
+						}
+					\end{scope}
+					\fi
+				\end{tikzpicture}
+				\noindent\usebox{\specialnotesbox}\par
+				\vspace{2\baselineskip}
+			}{}
+			
+			%%%% MISC %%%%
+			\usepackage{lipsum}
+			\usepackage[hidelinks]{hyperref}

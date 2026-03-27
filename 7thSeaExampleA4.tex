@@ -1,0 +1,177 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 7TH SEA RPG TEMPLATE
+% A template for creating 7th Sea RPG sourcebooks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{7thSeaPreambleA4}
+
+%%%% BOOK TITLE %%%%
+\newcommand{\bookTitleFooter}{7th Sea Template}
+
+%%%% DOCUMENT METADATA %%%%
+\title{7th Sea \\
+	\Huge Template}
+\author{}
+\date{}
+
+\begin{document}
+
+    %\setTheme{THEME}  % Here set theme for the whole book: khitai, 1knations, newWorld, ifri, crescentEmpire, citiesOfWonder, pirateNations, priceOfArrogance, theah (default)
+    \maketitle
+    
+    \clearpage              % Use this two (or just second) lines to supress
+    \thispagestyle{empty}   % footer from appearing on blank pages
+    \raggedbottom
+    \tableofcontents
+
+    \newpage
+
+    \begin{center}
+	  \includegraphics[height=\textheight, keepaspectratio=true]{img/\gettheme/overlay}
+    \end{center}
+    
+
+    \chapter{Overview}
+    \markboth{Overview}{} % Use this to get original capitalization in footer.
+    
+    This template was made to let You create beautiful yet consistent 7th Sea books,
+    a tabletop roleplaying game of swashbuckling
+    and intrigue, exploration and adventure, taking place on the
+    ­continent of Théah, a land of magic and mystery inspired by
+    our own Europe.\\
+		
+	
+    \section{Section}
+    Sections break up chapters into large groups of associated text.
+    
+    \subsection{Subsection}
+    Subsections further break down the information for the reader.
+    
+    \subsubsection{Subsubsection}
+    Subsubsections are the furthest division of text that still have a block header. Below this level, headers are displayed inline.
+	
+    \section{Tables}
+    
+    \subsection{Basic Table Example}
+    
+    \begin{NiceTable}{X X X}
+    	\textbf{Ship Type} & \textbf{Crew Size} & \textbf{Cargo Capacity} \\
+    	\hline
+    	Sloop & 20 & Small \\
+    	Galleon & 100 & Large \\
+    	Frigate & 60 & Medium \\
+    	Merchant Ship & 40 & Very Large
+    \end{NiceTable}
+    
+    \subsection{Table with color Header and Centered Columns}
+    
+    \begin{NiceTable}[Important campaign characters]{X[m,c] X[m,c] X[m,c]}
+    	\SetRow{bg=baseColor, fg=specialNotesTextColor, font=\bfseries} Character & Nation & Role \\
+    	Captain Reis & Vodacce & Villain \\
+    	Lady MacKenzie & Highland Marches & Hero \\
+    	Don Alvarez & Castille & Sidekick \\
+    	Maria del Torres & Castille & Hero \\
+    \end{NiceTable}
+    
+    \subsection{Table with color Header and alternating rows}
+    
+    \begin{NiceTable}[Dueling Maneuvers][baseColor!30]{X[m] Q[m] X[m]}
+    	\SetRow{bg=baseColor, fg=specialNotesTextColor, font=\bfseries} Maneuver & Style & Effect \\
+    	Riposte & Aldana & Counter-attack after successful defense \\
+    	Pommel Strike & Eisenfaust & Momentarily stun your opponent \\
+    	Feint & Valroux & Bypass opponent's defense with deception \\
+    	Lunge & Ambrogia & Strike from unexpected distance \\
+    	Tagging & Leegstra & Inflict minor wound to create opening \\
+    	Bind & Rogers & Lock opponent's blade to control distance
+    \end{NiceTable}
+    
+    
+    
+    \newpage
+\begin{SpecialNotes}[img/\gettheme/overlay]{Special Notes \\ Read Carefully}
+	\setlength{\baselineskip}{1.4\baselineskip}% Increase line spacing
+	Special notes are designed to draw attention for important information.
+	Always start them on top of column. Background image is optional.
+	Headers can be multilined, but don't overdo. For increased readability 
+	this example increase baselineskip, but nothing prevents You from formating it Your way. Don't put it on chapter pages as it will overflow badly.
+		\setlength{\baselineskip}{1\baselineskip}% restore line spacing
+			
+\end{SpecialNotes}
+    
+    \section{Citations}
+
+    \begin{Citation}[Captain Ernesto Castillo]{Never turn your back to the sea, for she is as fickle as fortune itself.}
+    \end{Citation}
+
+    \section{Advantages}
+    \hypertarget{a:innateadvantage}{\BGHeader{Innate Advantage (I)}}
+    This is your inherent advantage
+    
+    \hypertarget{a:knackadvantage}{\BGHeader{Knack Advantage (K)}}
+    Requires Hero Point to activate but no raises
+    
+    \newpage
+    \section{Backgrounds}
+    \BGHeader{Book Maker} 
+    \noindent You live to create beautiful books for others.
+    
+    \Quirk{Quirk}{Gain Hero Point each time You link mentioned text.}
+
+    
+    \begin{table}[h]
+        \centering
+        \renewcommand{\arraystretch}{1.2} % Adjust row height for better readability
+        \begin{tabular}{p{0.45\columnwidth} p{0.45\columnwidth}} % Adjust column width
+            \textbf{Advantages} & \textbf{Skills} \\
+            \hline
+            \hyperlink{a:innateadvantage}{Innate Advantage} & Empathy \\
+            \hyperlink{a:knackadvantage}{Knack Advantage} & Convince \\
+            & Notice \\
+            & Hide \\
+            \hline
+        \end{tabular}
+    \end{table}
+    
+
+
+	\section{Colored box}
+    \begin{ColorBox}{
+    	To distinguish some sections from surrounding content use ColorBox. Especially usefull for gameplay description or stories to be told.
+    }
+    \end{ColorBox}
+    
+    \section{Themes}
+    
+    \setTheme{pirateNations}
+    \BGHeader{pirateNations}
+
+    \setTheme{crescentEmpire}
+    \BGHeader{crescentEmpire}
+
+    \setTheme{1knations}
+    \BGHeader{1knations}
+
+    \setTheme{ifri}
+    \BGHeader{ifri}
+
+    \setTheme{newWorld}
+    \BGHeader{newWorld}
+
+    \setTheme{khitai}
+    \BGHeader{khitai}
+
+    \setTheme{priceOfArrogance}
+    \BGHeader{priceOfArrogance}
+
+    \setTheme{theah}
+    \BGHeader{theah}
+
+    \setTheme{citiesOfWonder}
+    \BGHeader{citiesOfWonder}
+    
+    \setTheme{theah}
+    % Restore original theme
+    %\setTheme{THEME}
+
+        
+\end{document}
